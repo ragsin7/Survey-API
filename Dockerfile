@@ -12,11 +12,8 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# 👇 THIS LINE IS THE MOST IMPORTANT
-COPY --from=builder /app/target/*jar /app/app.jar
-
-# Debug safety (temporary but recommended)
-RUN ls -l /app
+# Copy the exact executable Spring Boot jar
+COPY --from=builder /app/target/app.jar ./app.jar
 
 EXPOSE 8080
-CMD ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
