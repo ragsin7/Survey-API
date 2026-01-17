@@ -12,7 +12,11 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-COPY --from=builder /app/target/*.jar app.jar
+# 👇 THIS LINE IS THE MOST IMPORTANT
+COPY --from=builder /app/target/*jar /app/app.jar
+
+# Debug safety (temporary but recommended)
+RUN ls -l /app
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "/app/app.jar"]
